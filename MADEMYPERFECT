@@ -2,205 +2,92 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Big/Small Predictor</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login Page</title>
   <style>
-    * { box-sizing: border-box; }
-
     body {
       margin: 0;
-      padding: 20px;
-      font-family: monospace;
-      background-color: #000;
-      color: #00ff00;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f4;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
+      height: 100vh;
     }
 
-    .custom-header {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 20px;
-      color: #00ff00;
-      text-shadow: 0 0 10px #00ff00;
+    .login-container {
+      background: #ffffff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      width: 300px;
+    }
+
+    .login-container h2 {
       text-align: center;
+      margin-bottom: 1.5rem;
+      color: #333;
     }
 
-    h2 {
-      font-size: 18px;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-
-    input[type="text"] {
-      padding: 10px;
-      font-size: 16px;
+    .login-container input[type="text"],
+    .login-container input[type="password"] {
       width: 100%;
-      max-width: 300px;
-      background-color: #111;
-      color: #00ff00;
-      border: 1px solid #00ff00;
-      border-radius: 5px;
-      margin-bottom: 15px;
-      text-align: center;
-    }
-
-    .box-group {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      margin-bottom: 20px;
-      width: 100%;
-      max-width: 300px;
-    }
-
-    .box {
-      display: flex;
-      flex-direction: column;
-      background: #111;
-      border: 1px solid #00ff00;
-      padding: 10px;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
       border-radius: 8px;
+      font-size: 1rem;
     }
 
-    .btn-group {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      margin-top: 5px;
-    }
-
-    .choice-btn {
-      padding: 10px;
-      background-color: #111;
-      color: #00ff00;
-      border: 1px solid #00ff00;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.2s ease;
-    }
-
-    .choice-btn.selected {
-      background-color: #00ff00;
-      color: #000;
-    }
-
-    button {
-      padding: 12px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      background-color: #00ff00;
-      color: #000;
-      border: none;
-      border-radius: 5px;
-      transition: 0.2s;
+    .login-container button {
       width: 100%;
-      max-width: 300px;
-      margin-top: 10px;
+      padding: 0.75rem;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
     }
 
-    button:hover {
-      background-color: #00cc00;
+    .login-container button:hover {
+      background-color: #0056b3;
     }
 
-    #result {
-      margin-top: 25px;
-      font-weight: bold;
+    .message {
       text-align: center;
-      max-width: 90%;
-      font-size: 22px;
-      padding: 15px;
-      background-color: #111;
-      border: 2px solid #00ff00;
-      border-radius: 10px;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: red;
     }
   </style>
 </head>
 <body>
 
-  <div class="custom-header">Made by Earning with Hacks</div>
+<div class="login-container">
+  <h2>Login</h2>
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+  <div class="message" id="message"></div>
+</div>
 
-  <h2>Enter Period Number</h2>
-  <input type="text" id="periodInput" maxlength="10" placeholder="Enter period number">
+<script>
+  function login() {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const message = document.getElementById("message");
 
-  <h2>Select Big or Small (5 Boxes)</h2>
-  <div class="box-group" id="selectionBoxes"></div>
-
-  <button onclick="getPrediction()">Get Prediction</button>
-  <div id="result"></div>
-
-  <script>
-    const usedPeriods = new Set();
-    const boxSelections = Array(5).fill(null);
-    const selectionBoxes = document.getElementById("selectionBoxes");
-    const periodInput = document.getElementById("periodInput");
-
-    // Generate 5 boxes
-    for (let i = 0; i < 5; i++) {
-      const box = document.createElement("div");
-      box.className = "box";
-      box.innerHTML = `
-        <div>Box ${i + 1}</div>
-        <div class="btn-group">
-          <button class="choice-btn" data-box="${i}" data-value="big">Big</button>
-          <button class="choice-btn" data-box="${i}" data-value="small">Small</button>
-        </div>
-      `;
-      selectionBoxes.appendChild(box);
+    if (username === "admin" && password === "password") {
+      message.style.color = "green";
+      message.textContent = "Login successful!";
+    } else {
+      message.style.color = "red";
+      message.textContent = "Invalid username or password.";
     }
-
-    document.querySelectorAll(".choice-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const boxIndex = parseInt(btn.dataset.box);
-        const value = btn.dataset.value;
-        const buttonsInGroup = btn.parentElement.querySelectorAll(".choice-btn");
-        buttonsInGroup.forEach(b => b.classList.remove("selected"));
-        btn.classList.add("selected");
-        boxSelections[boxIndex] = value;
-      });
-    });
-
-    function getPrediction() {
-      const period = periodInput.value.trim();
-      const resultDiv = document.getElementById('result');
-
-      if (!period || isNaN(period)) {
-        resultDiv.innerText = "⚠️ Please enter a valid period number.";
-        return;
-      }
-
-      if (usedPeriods.has(period)) {
-        resultDiv.innerText = `⚠️ Prediction already made for period ${period}. Wait for next.`;
-        return;
-      }
-
-      if (boxSelections.includes(null)) {
-        resultDiv.innerText = "❌ Please select Big/Small for all 5 boxes.";
-        return;
-      }
-
-      const bigCount = boxSelections.filter(v => v === "big").length;
-      const smallCount = 5 - bigCount;
-
-      let nextPrediction = bigCount > smallCount ? "Small" : "Big";
-      if (bigCount === smallCount) {
-        nextPrediction = parseInt(period.slice(-1)) % 2 === 0 ? "Big" : "Small";
-      }
-
-      resultDiv.innerText = `✅ Prediction for Period ${period}: ${nextPrediction}`;
-      usedPeriods.add(period);
-    }
-
-    // Auto-increment period every minute
-    setInterval(() => {
-      let current = parseInt(periodInput.value);
-      if (!isNaN(current)) {
-        periodInput.value = current + 1;
-      }
-    }, 60000);
-  </script>
+  }
+</script>
 
 </body>
 </html>
